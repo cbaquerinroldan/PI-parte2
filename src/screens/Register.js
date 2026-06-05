@@ -1,33 +1,34 @@
 import {Text, View, Pressable, TextInput} from "react-native"
-import {useState} from "react";
-import {StyleSheet } from "react-native";
-import {auth } from "../firebase/config";
-import Home from "./Home"
+import { useState} from "react";
+import { StyleSheet } from "react-native";
+import { auth } from "../firebase/config";
+import Login from "./Login";
 
-function Login (){
+function Register ({navigation}){
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [register, setRegister] = useState(false)
 
   function onSubmit() {
-  auth.signInWithEmailAndPassword(email, password)
-   .then(response => {
-      
-   })
-   .catch(error => {
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(response => {
+      setRegister(true)
+    })
+    .catch(error => {
       console.log(error);
-   });
-  }
+    });
+}
     return(
     <View style={styles.container}> 
-        <Text>Login</Text>
+        <Text>Register</Text>
         <TextInput style={styles.input} keyboardType="email-address" placeholder="email" onChangeText={text => setEmail(text)} value={email}/> 
         <TextInput style={styles.input} keyboardType="default" placeholder="password" secureTextEntry= {true} onChangeText={text => setPassword(text)} value={password}/>
-        <Pressable style={styles.button} onPress={()=> {onSubmit()
-        navigation.navigate("Home")
+        <Pressable styles={styles.button} onPress={()=> {onSubmit();
+          navigation.navigate("Login")
         }}> 
-            <Text style={styles.buttonText}> Login</Text>
+            <Text styles={styles.buttonText}> Register</Text>
         </Pressable>
+      
     </View>);
 }
 
@@ -61,4 +62,4 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
 });
-export default Login;
+export default Register;
