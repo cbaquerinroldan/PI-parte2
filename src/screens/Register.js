@@ -1,21 +1,36 @@
 import {Text, View, Pressable, TextInput} from "react-native"
 import { useState} from "react";
 import { StyleSheet } from "react-native";
-import { auth } from "../firebase/config";
-import Login from "./Login";
+import { auth, db } from "../firebase/config";
 
-function Register ({navigation}){
+
+function Register (props){
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [username, setUsername] = useState("");
     const [register, setRegister] = useState(false)
+    const [error, setError] = useState("")
 
-  function onSubmit() {
-  auth.createUserWithEmailAndPassword(email, password)
+  function onSubmit(email, password) {
+    if (email === "" || password === "" || username === "") {
+      setError("Todos los campos son obligatorios");
+      return;
+    }
+   auth.createUserWithEmailAndPassword(email, password)
     .then(response => {
+      db.collection("users").add({
+        owner: auth.currentUser.email,
+        username : username,
+        createdAt: Date.now(),
+      })
+      .then()
+      .catch(error => console.log(error))
       setRegister(true)
+      props.navigation.navigate("Login")
     })
     .catch(error => {
       console.log(error);
+      setError("error")
     });
 }
     return(
@@ -23,10 +38,17 @@ function Register ({navigation}){
         <Text>Register</Text>
         <TextInput style={styles.input} keyboardType="email-address" placeholder="email" onChangeText={text => setEmail(text)} value={email}/> 
         <TextInput style={styles.input} keyboardType="default" placeholder="password" secureTextEntry= {true} onChangeText={text => setPassword(text)} value={password}/>
-        <Pressable styles={styles.button} onPress={()=> {onSubmit();
-          navigation.navigate("Login")
+        <TextInput style={styles.input} keyboardType="default" placeholder="username" onChangeText={text => setUsername(text)} value={username}/>
+        
+        {error === "" ? null : <Text style={styles.error}>{error}</Text>}
+
+        <Pressable style={styles.button} onPress={()=> {onSubmit(email,password)
         }}> 
-            <Text styles={styles.buttonText}> Register</Text>
+            <Text style={styles.buttonText}> Register</Text>
+        </Pressable>
+
+        <Pressable onPress={() => props.navigation.navigate("Login")}>
+                <Text style={styles.link}>Ya tengo cuenta. Iniciar Sesión</Text>
         </Pressable>
       
     </View>);
@@ -45,7 +67,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 6,
-    marginVertical: 10,
+    marginTop: 10,
+    marginBottom: 10,
+  },
+   error: {
+    color: "red",
+    marginTop: 10,
+    marginBottom: 10,
   },
 
   button: {
