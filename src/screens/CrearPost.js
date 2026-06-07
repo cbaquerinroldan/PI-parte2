@@ -1,11 +1,11 @@
 
 import { Text, View } from "react-native"
-function Home(props) {
+function CrearPost(props) {
   return (
     <View>
-      <Text>Home</Text>
+      <Text>CrearPost</Text>
     </View>
   );
 }
 
-export default Home;
+export default CrearPost;

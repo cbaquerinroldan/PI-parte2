@@ -2,7 +2,6 @@ import { Text, View, Pressable, TextInput } from "react-native"
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { auth } from "../firebase/config";
-import Home from "./Home"
 
 function Login(props) {
   const [email, setEmail] = useState("")
