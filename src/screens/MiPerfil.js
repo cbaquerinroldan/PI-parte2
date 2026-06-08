@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import { View, Text, Pressable, StyleSheet, FlatList } from "react-native";
 import { db, auth } from "../firebase/config"
-
-
-
+import Post from "../components/Post";
 
 
 function MiPerfil({ navigation }) {
   const [username, setUsername] = useState("");
+  const [posts, setPosts] = useState([])
 
   function logout() {
     auth.signOut()
@@ -15,19 +14,40 @@ function MiPerfil({ navigation }) {
 
   useEffect(() => {
     db.collection("users")
-      .where("owner", "==", auth.currentUser.email)
+    .where("owner", "==", auth.currentUser.email)
       .onSnapshot(docs => {
 
         docs.forEach(doc => {
           setUsername(doc.data().username);
         });
       });
-  }, []);
+
+     db.collection("posts")
+        .where("Email", "==", auth.currentUser.email)
+        .onSnapshot(docs => {
+            let misPosts = []
+            docs.forEach(doc => {
+                misPosts.push({
+                    id: doc.id,
+                    data: doc.data()
+                })
+            })
+            setPosts(misPosts)
+        })}, []);
+
+
+
+ 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Perfil del usuario</Text>
-      <Text>Email: {auth.currentUser?.email}</Text>
       <Text>Usuario: {username}</Text>
+      <Text>Email: {auth.currentUser?.email}</Text>
+      <Text>Últimos posteos</Text>
+      <FlatList 
+          data={posts} 
+          keyExtractor={item => item.id.toString()} 
+          renderItem={({ item }) => <Post data={item.data} />}/>
       <Pressable style={styles.button} onPress={() => {
         logout();
         navigation.navigate("Login");

@@ -1,5 +1,5 @@
 import { Text, View, Pressable, TextInput } from "react-native"
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import { StyleSheet } from "react-native";
 import { auth } from "../firebase/config";
 
@@ -21,9 +21,16 @@ function Login(props) {
       })
       .catch(error => {
         console.log(error);
-        setError("error")
+        setError(error.message)
       });
   }
+useEffect(() => {
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            props.navigation.navigate("Home")
+        }
+    })
+}, [])
   return (
     <View style={styles.container}>
       <Text>Login</Text>

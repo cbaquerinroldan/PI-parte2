@@ -5,7 +5,7 @@
   import Login from "./src/screens/Login"
   import Register from "./src/screens/Register"
   import Home from "./src/screens/Home"
-  import NavegacionTab from"./src/Navigation/NavegacionTab"
+  import NavegacionTab from"./src/components/NavegacionTab"
 
   const Stack = createNativeStackNavigator();
 
@@ -16,8 +16,7 @@
         <Stack.Navigator>
           <Stack.Screen name="Register" component={Register} options={{headerShown: false}} />
           <Stack.Screen name="Login" component={Login} options={{headerShown: false}} />
-
-          <Stack.Screen name="Home" component={ NavegacionTab } options={{headerShown: false}} />  
+          <Stack.Screen name="Home" component={NavegacionTab} options={{headerShown: false}} />  
 
         </Stack.Navigator>
       </NavigationContainer>

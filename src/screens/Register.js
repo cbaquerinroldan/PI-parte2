@@ -1,5 +1,5 @@
 import {Text, View, Pressable, TextInput} from "react-native"
-import { useState} from "react";
+import { useState, useEffect} from "react";
 import { StyleSheet } from "react-native";
 import { auth, db } from "../firebase/config";
 
@@ -23,16 +23,26 @@ function Register (props){
         username : username,
         createdAt: Date.now(),
       })
-      .then()
+      .then(
+        ()=> setRegister(true)
+      )
       .catch(error => console.log(error))
-      setRegister(true)
+      
       props.navigation.navigate("Login")
     })
     .catch(error => {
       console.log(error);
-      setError("error")
+      setError(error.message)
     });
 }
+useEffect(() => {
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            props.navigation.navigate("Home")
+        }
+    })
+}, [])
+
     return(
     <View style={styles.container}> 
         <Text>Register</Text>

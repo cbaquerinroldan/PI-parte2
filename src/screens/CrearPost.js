@@ -12,9 +12,11 @@ function CrearPost(props) {
             Email: auth.currentUser.email,
             Descripcion: descripcion,
             createdAt: Date.now(),
+            comentarios: [],
+            likes: [],
         })
             .then(() => {
-               
+
             })
             .catch(e => console.log(e))
     }
@@ -28,7 +30,7 @@ function CrearPost(props) {
 
             />
             <Pressable onPress={crearPost}>
-                <Text>Publicar posteo</Text>
+                <Text>Publicar</Text>
             </Pressable>
         </View>
     );

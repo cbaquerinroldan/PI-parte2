@@ -1,7 +1,8 @@
 import { auth, db } from "../firebase/config";
-import { Text, View, FlatList } from "react-native"
+import { Text, View, FlatList, ActivityIndicator } from "react-native"
 import { useState, useEffect } from "react";
-import Post from "../Componetes/Post";
+import Post from "../components/Post"
+
 
 
 function Home(props) {
@@ -27,15 +28,25 @@ function Home(props) {
 
   }
   useEffect(() => {
-    mostrarPost();
-  }, []);
+    auth.onAuthStateChanged(user => {
+        if (!user) {
+            props.navigation.navigate("Login")
+        }else {
+            mostrarPost()
+        }
+    })
+}, [])
+
+ 
   return (
     <View>
-      <FlatList
+      {loading ? 
+      <ActivityIndicator color="blue" size="large" /> : <FlatList
         data={posteo}
         keyExtractor={item => item.id.toString()}
-        renderItem={({ item }) => <Post data={item.data} />}
-      />
+        renderItem={({ item }) => <Post data={item.data} navigation= {props.navigation} />}
+      />}
+      
 
     </View>
   );
