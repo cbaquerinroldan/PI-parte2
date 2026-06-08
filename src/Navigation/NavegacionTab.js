@@ -16,11 +16,11 @@ function NavegacionTab() {
        options={{
         tabBarIcon: () => <Entypo name="home" size={24} color="black" />}}
         />
-          <Tab.Screen name="CrearPost" component={CrearPost}
+          <Tab.Screen name="Crear Post" component={CrearPost}
        options={{
         tabBarIcon: () => <FontAwesome5 name="plus-circle" size={24} color="black" />}}
         />
-      <Tab.Screen name="Miperfil" component={MiPerfil} options={{
+      <Tab.Screen name="Mi perfil" component={MiPerfil} options={{
         tabBarIcon: () => <FontAwesome5 name="user-alt" size={24} color="black" />
       }}
       />

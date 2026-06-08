@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { db, auth } from "../firebase/config"
+
+
+
+
+
 function MiPerfil({ navigation }) {
   const [username, setUsername] = useState("");
 
