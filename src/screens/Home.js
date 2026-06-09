@@ -44,7 +44,7 @@ function Home(props) {
       <ActivityIndicator color="blue" size="large" /> : <FlatList
         data={posteo}
         keyExtractor={item => item.id.toString()}
-        renderItem={({ item }) => <Post data={item.data} navigation= {props.navigation} />}
+        renderItem={({ item }) => <Post data={item.data} id={item.id} navigation={props.navigation} />}
       />}
       
 
