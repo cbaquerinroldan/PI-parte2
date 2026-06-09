@@ -1,5 +1,5 @@
 import { auth, db } from "../firebase/config";
-import { Text, View, FlatList, ActivityIndicator } from "react-native"
+import { View, FlatList, ActivityIndicator } from "react-native"
 import { useState, useEffect } from "react";
 import Post from "../components/Post"
 
@@ -39,7 +39,7 @@ function Home(props) {
 
  
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       {loading ? 
       <ActivityIndicator color="blue" size="large" /> : <FlatList
         data={posteo}
