@@ -16,7 +16,8 @@ function CrearPost(props) {
             likes: [],
         })
             .then(() => {
-
+                setDescripcion("")
+                props.navigation.navigate("NavegacionStack", { screen: "Home",});
             })
             .catch(e => console.log(e))
     }
@@ -26,6 +27,7 @@ function CrearPost(props) {
                 style={styles.input}
                 keyboardType="default"
                 onChangeText={(text) => setDescripcion(text)}
+                placeholder="Ecribe tu Posteo"
                 value={descripcion}
 
             />

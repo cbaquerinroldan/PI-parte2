@@ -47,7 +47,7 @@ function MiPerfil({ navigation }) {
       <FlatList 
           data={posts} 
           keyExtractor={item => item.id.toString()} 
-          renderItem={({ item }) => <Post data={item.data} />}/>
+          renderItem={({ item }) => <Post data={item.data} id={item.id} navigation={navigation} />}/>
       <Pressable style={styles.button} onPress={() => {
         logout();
         navigation.navigate("Login");
