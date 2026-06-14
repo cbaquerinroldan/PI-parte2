@@ -1,103 +1,136 @@
-import {Text, View, Pressable, TextInput} from "react-native"
-import { useState, useEffect} from "react";
+import { Text, View, Pressable, TextInput } from "react-native"
+import { useState, useEffect } from "react";
 import { StyleSheet } from "react-native";
 import { auth, db } from "../firebase/config";
 
 
-function Register (props){
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [username, setUsername] = useState("");
-    const [register, setRegister] = useState(false)
-    const [error, setError] = useState("")
+function Register(props) {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [username, setUsername] = useState("");
+  const [register, setRegister] = useState(false)
+  const [error, setError] = useState("")
 
   function onSubmit(email, password) {
     if (email === "" || password === "" || username === "") {
       setError("Todos los campos son obligatorios");
       return;
     }
-   auth.createUserWithEmailAndPassword(email, password)
-    .then(response => {
-      db.collection("users").add({
-        owner: auth.currentUser.email,
-        username : username,
-        createdAt: Date.now(),
+    auth.createUserWithEmailAndPassword(email, password)
+      .then(response => {
+        db.collection("users").add({
+          owner: auth.currentUser.email,
+          username: username,
+          createdAt: Date.now(),
+        })
+          .then(() => {
+            setRegister(true)
+            setEmail("")
+            setPassword("")
+            setUsername("")
+            setError("")
+            props.navigation.navigate("Login")
+          })
+
+          .catch(error => console.log(error))
+
       })
-      .then(
-        ()=> setRegister(true)
-      )
-      .catch(error => console.log(error))
-      
-      props.navigation.navigate("Login")
-    })
-    .catch(error => {
-      console.log(error);
-      setError(error.message)
-    });
-}
-useEffect(() => {
+      .catch(error => {
+        console.log(error);
+        setError(error.message)
+      });
+  }
+  useEffect(() => {
     auth.onAuthStateChanged(user => {
-        if (user) {
-            props.navigation.navigate("Home")
-        }
+      if (user) {
+        props.navigation.navigate("Home")
+      }
     })
-}, [])
+  }, [])
 
-    return(
-    <View style={styles.container}> 
-        <Text>Register</Text>
-        <TextInput style={styles.input} keyboardType="email-address" placeholder="email" onChangeText={text => setEmail(text)} value={email}/> 
-        <TextInput style={styles.input} keyboardType="default" placeholder="password" secureTextEntry= {true} onChangeText={text => setPassword(text)} value={password}/>
-        <TextInput style={styles.input} keyboardType="default" placeholder="username" onChangeText={text => setUsername(text)} value={username}/>
-        
-        {error === "" ? null : <Text style={styles.error}>{error}</Text>}
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Register</Text>
+      <TextInput style={styles.input} keyboardType="email-address" placeholder="email" onChangeText={text => setEmail(text)} value={email} />
+      <TextInput style={styles.input} keyboardType="default" placeholder="password" secureTextEntry={true} onChangeText={text => setPassword(text)} value={password} />
+      <TextInput style={styles.input} keyboardType="default" placeholder="username" onChangeText={text => setUsername(text)} value={username} />
 
-        <Pressable style={styles.button} onPress={()=> {onSubmit(email,password)
-        }}> 
-            <Text style={styles.buttonText}> Register</Text>
-        </Pressable>
+      {error === "" ? null : <Text style={styles.error}>{error}</Text>}
 
-        <Pressable onPress={() => props.navigation.navigate("Login")}>
-                <Text style={styles.link}>Ya tengo cuenta. Iniciar Sesión</Text>
-        </Pressable>
-      
+      <Pressable style={styles.button} onPress={() => {
+        onSubmit(email, password)
+      }}>
+        <Text style={styles.buttonText}> Register</Text>
+      </Pressable>
+
+      <Pressable onPress={() => {
+        setEmail("")
+        setPassword("")
+        setUsername("")
+        setError("")
+        props.navigation.navigate("Login")
+      }}>
+        <Text style={styles.link}>Ya tengo cuenta. Iniciar Sesión</Text>
+      </Pressable>
+
     </View>);
 }
 
+export default Register;
+
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 10,
-    marginTop: 20,
+    flex: 1,
+    backgroundColor: "#FFF7F1",
+    padding: 20,
+    paddingTop: 60,
+  },
+
+  title: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#ff9e80ff",
+    marginBottom: 25,
   },
 
   input: {
     height: 50,
-    paddingVertical: 15,
-    paddingHorizontal: 10,
+    backgroundColor: "#FFFFFF",
+    paddingHorizontal: 14,
     borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 6,
-    marginTop: 10,
-    marginBottom: 10,
-  },
-   error: {
-    color: "red",
-    marginTop: 10,
-    marginBottom: 10,
+    borderColor: "#F2B8A0",
+    borderRadius: 14,
+    marginBottom: 14,
+    color: "#4E342E",
   },
 
   button: {
-    backgroundColor: "#28a745",
-    paddingHorizontal: 10,
-    paddingVertical: 6,
+    backgroundColor: "#ff9e80ff",
+    height: 48,
+    borderRadius: 14,
+    justifyContent: "center",
     alignItems: "center",
-    borderRadius: 4,
+    marginTop: 8,
     borderWidth: 1,
-    borderColor: "#28a745",
+    borderColor: "#ff9e80ff",
   },
 
   buttonText: {
-    color: "#fff",
+    color: "#FFFFFF",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+
+  link: {
+    color: "#7A3E2B",
+    textAlign: "center",
+    marginTop: 20,
+    fontWeight: "bold",
+  },
+
+  error: {
+    color: "#C0392B",
+    marginBottom: 12,
+    fontWeight: "600",
   },
 });
-export default Register;

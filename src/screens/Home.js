@@ -1,5 +1,5 @@
 import { auth, db } from "../firebase/config";
-import { View, FlatList, ActivityIndicator } from "react-native"
+import { View, Text, FlatList, ActivityIndicator, StyleSheet} from "react-native"
 import { useState, useEffect } from "react";
 import Post from "../components/Post"
 
@@ -39,9 +39,13 @@ function Home(props) {
 
  
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: "#FFF7F1", paddingTop: 10 }}>
+      <View style={styles.contenedorTitulo}>
+      <Text style={styles.titulo}>Últimos posteos</Text>
+    </View>
+
       {loading ? 
-      <ActivityIndicator color="blue" size="large" /> : <FlatList
+      <ActivityIndicator color="#ff9e80ff" size="large" /> : <FlatList
         data={posteo}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => <Post data={item.data} id={item.id} navigation={props.navigation} />}
@@ -51,5 +55,29 @@ function Home(props) {
     </View>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#FFF7F1",
+    paddingTop: 15
+  },
+
+  contenedorTitulo: {
+    backgroundColor: "#FFE5DB",
+    marginLeft: 12,
+    marginRight: 12,
+    marginBottom: 8,
+    padding: 14,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "#F2B8A0"
+  },
+
+  titulo: {
+    color: "#7A3E2B",
+    fontSize: 24,
+    fontWeight: "bold"
+  }
+});
 
 export default Home;

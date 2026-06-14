@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Home from "../screens/Home";
+import { StyleSheet } from "react-native";
 import MiPerfil from '../screens/MiPerfil';
 import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -12,7 +12,7 @@ const Tab = createBottomTabNavigator();
 
 function NavegacionTab() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator style={styles.tabBar}>
       <Tab.Screen name="NavegacionStack" component={NavegacionStack}
        options={{
         tabBarIcon: () => <Entypo name="home" size={24} color="black" /> , headerShown: false, tabBarShowLabel:false}} 
@@ -28,4 +28,12 @@ function NavegacionTab() {
     </Tab.Navigator>
   )
 }
+const styles = StyleSheet.create({
+    tabBar: {
+        backgroundColor: "#fff",
+        borderTopWidth: 1,
+        borderTopColor: "#ddd",
+        height: 60
+    }
+});
 export default NavegacionTab;
